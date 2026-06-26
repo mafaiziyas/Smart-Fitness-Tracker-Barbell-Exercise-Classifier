@@ -6,7 +6,7 @@
 
 An exploration and implementation of context-aware machine learning models designed to automatically track free weight exercises, count repetitions, and detect execution form using wristband sensor data. This repository is inspired by the resources and time-series methodologies provided by [ML4QS (Machine Learning for the Quantified Self)](https://ml4qs.org/data/). 
 
-For ease, the project is currently focusing on differentiating specific barbell exercises—namely **bench press, overhead press (ohp), squat, deadlift, and barbell row**—from resting episodes and free movements.
+For ease, the project is currently focusing on differentiating specific barbell exercises - namely **bench press, overhead press (ohp), squat, deadlift, and barbell row** - from resting episodes and free movements.
 
 ---
 
@@ -41,7 +41,7 @@ The preprocessing pipeline condenses raw streams into a model-ready dataset:
 1. **Metadata Extraction:** Parsed 187 CSV file names via `glob` to extract `participant`, `label` (exercise), and `category` (set type) attributes before merging.
 2. **Stream Separation & Indexing:** Categorized files into independent **Accelerometer** and **Gyroscope** streams, converted raw `epoch (ms)` timestamps to standard `datetime`, and applied chronological indexing.
 3. **Resampling & Alignment:** Since sensors sample at different rates, both streams were resampled using a **100ms** window (`rule="100ms"`) applying `mean` for numerical vectors and `last` for categorical labels. This optimal window preserves macro-movement features without losing fidelity.
-4. **Final Cleaned Dataset:** Dropped missing values due to alignment mismatches, leaving a final high-fidelity dataset of **17,912 rows**.
+4. **Final Cleaned Dataset:** Dropped missing values due to alignment mismatches, leaving a final dataset of **17,912 rows**.
 
 ---
 
@@ -49,6 +49,6 @@ The preprocessing pipeline condenses raw streams into a model-ready dataset:
 
 To prevent data leakage and evaluate real-world generalization, the dataset is strictly partitioned by individual participants:
 
-* **Training Set (~79% | 14,145 rows):** Participants **A, E, and C** — used for core model learning.
-* **Validation Set (~12% | 2,092 rows):** Participant **D** — used for hyperparameter tuning.
-* **Test Set (~9% | 1,675 rows):** Participant **B** — held out entirely for ultimate evaluation.
+* **Training Set (~79% | 14,145 rows):** Participants **A, E, and C** - used for core model learning.
+* **Validation Set (~12% | 2,092 rows):** Participant **D** - used for hyperparameter tuning.
+* **Test Set (~9% | 1,675 rows):** Participant **B** - held out entirely for ultimate evaluation.
