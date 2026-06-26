@@ -25,3 +25,22 @@ While modern fitness wearables easily track aerobic activities (running, cycling
 We are initially focusing on the **Exercise Classification** component. The core objective of this phase is to accurately classify and differentiate each targeted barbell movement (`bench`, `ohp`, `squat`, `dead`, `row`) against resting periods and un-tracked free movements. 
 
 The data preprocessing for this stage is complete, laying the groundwork for model training and evaluation.
+
+## ⚙️ Data Preprocessing & Resampling
+
+The preprocessing pipeline condenses raw streams into a model-ready dataset:
+
+1. **Metadata Extraction:** Parsed 187 CSV file names via `glob` to extract `participant`, `label` (exercise), and `category` (set type) attributes before merging.
+2. **Stream Separation & Indexing:** Categorized files into independent **Accelerometer** and **Gyroscope** streams, converted raw `epoch (ms)` timestamps to standard `datetime`, and applied chronological indexing.
+3. **Resampling & Alignment:** Since sensors sample at different rates, both streams were resampled using a **100ms** window (`rule="100ms"`) applying `mean` for numerical vectors and `last` for categorical labels. This optimal window preserves macro-movement features without losing fidelity.
+4. **Final Cleaned Dataset:** Dropped missing values due to alignment mismatches, leaving a final high-fidelity dataset of **17,912 rows**.
+
+---
+
+## 📊 Data Split Strategy
+
+To prevent data leakage and evaluate real-world generalization, the dataset is strictly partitioned by individual participants:
+
+* **Training Set (~79% | 14,145 rows):** Participants **A, E, and C** — used for core model learning.
+* **Validation Set (~12% | 2,092 rows):** Participant **D** — used for hyperparameter tuning.
+* **Test Set (~9% | 1,675 rows):** Participant **B** — held out entirely for ultimate evaluation.
